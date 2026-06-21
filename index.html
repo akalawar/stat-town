@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stat Town: Bias Busters! - QCE Essential Math</title>
+    <!-- Tailwind CSS CDN for modern grid layouts and aesthetic utility styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for cartoonish, highly readable typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: #fdf5e6;
+            touch-action: manipulation;
+        }
+        h1, h2, h3, .cartoon-font {
+            font-family: 'Fredoka', sans-serif;
+        }
+        /* Custom bouncy animations to match cartoon aesthetics */
+        @keyframes bounce-slow {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+        @keyframes walk-cycle {
+            0%, 100% { transform: rotate(-5deg) translateY(0); }
+            50% { transform: rotate(5deg) translateY(-4px); }
+        }
+        .animate-bounce-slow {
+            animation: bounce-slow 2s infinite ease-in-out;
+        }
+        .anim-walk {
+            animation: walk-cycle 0.3s infinite ease-in-out;
+        }
+        /* Grid overlay for RPG adventure map style */
+        .grid-tile {
+            background-size: 40px 40px;
+            background-image: 
+                linear-gradient(to right, rgba(0, 0, 0, 0.04) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
+        }
+        /* Glassmorphism panel detailing standard style */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
+            border: 4px solid #1e293b;
+            box-shadow: 6px 6px 0px #1e293b;
+        }
+        .btn-cartoon {
+            transition: all 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 3px solid #1e293b;
+            box-shadow: 4px 4px 0px #1e293b;
+        }
+        .btn-cartoon:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px #1e293b;
+        }
+        .btn-cartoon:active {
+            transform: translate(2px, 2px);
+            box-shadow: 1px 1px 0px #1e293b;
+        }
+    </style>
+</head>
+<body class="relative min-h-screen overflow-x-hidden flex flex-col justify-between">
+
+    <header class="bg-amber-400 border-b-4 border-slate-800 p-4 sticky top-0 z-50 shadow-md">
+        <div class="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <div class="bg-slate-900 text-white rounded-full p-2 border-2 border-white animate-bounce-slow">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 002 2h2a2 2 0 002-2"></path></svg>
+                </div>
+                <div>
+                    <h1 class="text-2xl sm:text-3xl font-black text-slate-900 leading-none">STAT TOWN</h1>
+                    <span class="text-xs font-bold text-slate-800 tracking-wider">QCE ESSENTIAL MATHS • UNIT 2, TOPIC 1</span>
+                </div>
+            </div>
+            <div class="flex items-center gap-4 bg-white/80 px-4 py-2 rounded-full border-2 border-slate-900">
+                <span class="text-sm font-bold text-slate-700">Progression:</span>
+                <div class="flex gap-1" id="progression-dots">
+                    <div class="w-3 h-3 rounded-full bg-slate-300" id="dot-1" title="Quest 1"></div>
+                    <div class="w-3 h-3 rounded-full bg-slate-300" id="dot-2" title="Quest 2"></div>
+                    <div class="w-3 h-3 rounded-full bg-slate-300" id="dot-3" title="Quest 3"></div>
+                    <div class="w-3 h-3 rounded-full bg-slate-300" id="dot-4" title="Quest 4"></div>
+                </div>
+                <div class="bg-indigo-600 text-white font-extrabold px-3 py-1 rounded-full text-xs" id="score-pill">Score: 0</div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow flex items-center justify-center p-4">
+        
+        <div id="welcome-screen" class="glass-panel rounded-3xl p-6 sm:p-10 max-w-2xl w-full text-center bg-white">
+            <span class="bg-pink-100 text-pink-700 font-extrabold px-4 py-1.5 rounded-full text-sm border-2 border-pink-700 uppercase tracking-widest inline-block mb-4">
+                Interactive Learning Mission
+            </span>
+            <h2 class="text-3xl sm:text-5xl font-black text-slate-900 mb-4 tracking-tight leading-none">The Great Data Collection Quest!</h2>
+            <p class="text-slate-700 text-base sm:text-lg mb-8 max-w-lg mx-auto">
+                Welcome, mathematical adventurer! The Mayor of Stat Town needs an expert to collect unbiased data for the town's upcoming policies. Walk the streets, build reliable questionnaires, dodge convenience biases, and prove your data skills!
+            </p>
+
+            <h3 class="text-lg font-black text-slate-900 mb-3">Choose Your Walking Investigator:</h3>
+            <div class="grid grid-cols-2 gap-4 max-w-md mx-auto mb-8">
+                <!-- Stat-Man Character Option -->
+                <button onclick="selectCharacter('statman')" id="char-btn-statman" class="btn-cartoon bg-cyan-100 hover:bg-cyan-200 p-4 rounded-2xl flex flex-col items-center gap-3 border-4 border-slate-800 transition-all ring-4 ring-indigo-500">
+                    <div class="w-20 h-20 relative" id="avatar-statman-preview">
+                        <!-- Sammy Statman Premium Portrait -->
+                        <svg class="w-full h-full animate-bounce-slow" viewBox="0 0 64 64">
+                            <!-- Body/Outfit -->
+                            <rect x="18" y="38" width="28" height="24" rx="8" fill="#0284c7" stroke="#1e293b" stroke-width="3" />
+                            <path d="M26,38 L32,46 L38,38" fill="none" stroke="#1e293b" stroke-width="2.5" />
+                            <circle cx="32" cy="48" r="2.5" fill="#facc15" />
+                            <!-- Human Face -->
+                            <circle cx="32" cy="24" r="14" fill="#ffedd5" stroke="#1e293b" stroke-width="3" />
+                            <!-- Hair -->
+                            <path d="M18,22 Q24,10 32,11 Q40,10 46,22 Q32,16 18,22" fill="#1e293b" stroke="#1e293b" stroke-width="2" />
+                            <!-- Glasses -->
+                            <circle cx="27" cy="24" r="4.5" fill="none" stroke="#0891b2" stroke-width="2.5" />
+                            <circle cx="37" cy="24" r="4.5" fill="none" stroke="#0891b2" stroke-width="2.5" />
+                            <line x1="31.5" y1="24" x2="32.5" y2="24" stroke="#0891b2" stroke-width="2.5" />
+                            <!-- Face details -->
+                            <path d="M29,30 Q32,33 35,30" fill="none" stroke="#1e293b" stroke-width="2.5" stroke-linecap="round" />
+                            <circle cx="23" cy="26" r="2" fill="#fda4af" opacity="0.6" />
+                            <circle cx="41" cy="26" r="2" fill="#fda4af" opacity="0.6" />
+                        </svg>
+                    </div>
+                    <span class="font-extrabold text-slate-900">Sammy Stat-Man</span>
+                </button>
+
+                <!-- Query-Girl Character Option -->
+                <button onclick="selectCharacter('querygirl')" id="char-btn-querygirl" class="btn-cartoon bg-lime-100 hover:bg-lime-200 p-4 rounded-2xl flex flex-col items-center gap-3 border-4 border-slate-800 transition-all">
+                    <div class="w-20 h-20 relative" id="avatar-querygirl-preview">
+                        <!-- Quinn Query-Girl Premium Portrait -->
+                        <svg class="w-full h-full animate-bounce-slow" viewBox="0 0 64 64">
+                            <!-- Hair Back -->
+                            <circle cx="18" cy="18" r="7" fill="#ea580c" stroke="#1e293b" stroke-width="2" />
+                            <circle cx="46" cy="18" r="7" fill="#ea580c" stroke="#1e293b" stroke-width="2" />
+                            <!-- Body/Outfit -->
+                            <rect x="18" y="38" width="28" height="24" rx="8" fill="#65a30d" stroke="#1e293b" stroke-width="3" />
+                            <circle cx="32" cy="45" r="3" fill="#f43f5e" />
+                            <!-- Human Face -->
+                            <circle cx="32" cy="24" r="14" fill="#fed7aa" stroke="#1e293b" stroke-width="3" />
+                            <!-- Hair Front / Bangs -->
+                            <path d="M18,22 Q32,12 46,22 Q38,18 32,21 Q26,18 18,22" fill="#ea580c" stroke="#1e293b" stroke-width="2.5" />
+                            <!-- Eyes -->
+                            <ellipse cx="26" cy="24" r="2.5" rx="2" fill="#1e293b" />
+                            <ellipse cx="38" cy="24" r="2.5" rx="2" fill="#1e293b" />
+                            <!-- Smile -->
+                            <path d="M29,29 Q32,32 35,29" fill="none" stroke="#1e293b" stroke-width="2.5" stroke-linecap="round" />
+                            <!-- Cheeks -->
+                            <circle cx="22" cy="27" r="2.5" fill="#f43f5e" opacity="0.6" />
+                            <circle cx="42" cy="27" r="2.5" fill="#f43f5e" opacity="0.6" />
+                        </svg>
+                    </div>
+                    <span class="font-extrabold text-slate-900">Quinn Query-Girl</span>
+                </button>
+            </div>
+
+            <button onclick="startGame()" class="btn-cartoon w-full bg-emerald-400 hover:bg-emerald-500 text-slate-900 font-extrabold text-xl py-4 rounded-2xl max-w-md mx-auto block">
+                Let's Start Investigating!
+            </button>
+        </div>
+
+        <div id="game-map-screen" class="hidden w-full max-w-5xl flex flex-col gap-4">
+            
+            <!-- Instructions and Quest Banner -->
+            <div class="glass-panel rounded-2xl p-4 bg-yellow-50 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-3">
+                    <span class="text-3xl" id="quest-emoji">🎯</span>
+                    <div>
+                        <h4 class="font-black text-slate-900 leading-tight" id="active-quest-title">Quest 1: Find Mayor Mathers!</h4>
+                        <p class="text-sm text-slate-700" id="active-quest-desc">Walk over to the Town Hall at the center of town to start your data mission.</p>
+                    </div>
+                </div>
+                <div class="flex flex-col gap-1 items-end">
+                    <div class="text-right hidden md:block">
+                        <p class="text-xs font-black text-slate-500 uppercase">Controls</p>
+                        <p class="text-sm font-bold text-slate-700">Arrow Keys / WASD or D-pad below</p>
+                    </div>
+                    <!-- Neighborhood collection checklist -->
+                    <div id="neighborhood-checklist" class="hidden flex gap-2 mt-1">
+                        <span id="chk-sweets" class="text-xs bg-red-100 text-red-700 font-extrabold px-2 py-0.5 rounded-full border border-red-300">🍬 Sweets Street ❌</span>
+                        <span id="chk-veggie" class="text-xs bg-red-100 text-red-700 font-extrabold px-2 py-0.5 rounded-full border border-red-300">🥦 Veggie Valley ❌</span>
+                        <span id="chk-cliffs" class="text-xs bg-red-100 text-red-700 font-extrabold px-2 py-0.5 rounded-full border border-red-300">🥩 Carnivore Cliffs ❌</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Town Map Container -->
+            <div class="relative w-full aspect-[4/3] max-h-[500px] border-4 border-slate-900 bg-emerald-100 rounded-3xl overflow-hidden shadow-lg grid-tile" id="map-viewport">
+                
+                <!-- Neighborhood Zones overlays -->
+                <div class="absolute top-0 left-0 w-1/3 h-1/3 bg-orange-100/50 border-r-2 border-b-2 border-dashed border-slate-400 flex flex-col justify-between p-3 pointer-events-none">
+                    <span class="bg-orange-200 text-orange-800 font-extrabold text-[10px] sm:text-xs px-2 py-0.5 rounded border border-orange-800 w-max">Sweets Street (Sugar Lovers)</span>
+                </div>
+                <div class="absolute bottom-0 left-0 w-1/3 h-1/3 bg-lime-100/50 border-r-2 border-t-2 border-dashed border-slate-400 flex flex-col justify-end p-3 pointer-events-none">
+                    <span class="bg-lime-200 text-lime-800 font-extrabold text-[10px] sm:text-xs px-2 py-0.5 rounded border border-lime-800 w-max">Veggie Valley (Healthy Eaters)</span>
+                </div>
+                <div class="absolute top-0 right-0 w-1/3 h-1/3 bg-rose-100/50 border-l-2 border-b-2 border-dashed border-slate-400 p-3 flex justify-end pointer-events-none">
+                    <span class="bg-rose-200 text-rose-800 font-extrabold text-[10px] sm:text-xs px-2 py-0.5 rounded border border-rose-800 h-max">Carnivore Cliffs (Meat Lovers)</span>
+                </div>
+
+                <!-- Central Town Square Hub -->
+                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 bg-slate-200/80 rounded-full border-4 border-double border-slate-400 flex items-center justify-center pointer-events-none">
+                    <span class="text-slate-500 font-black text-[10px] uppercase tracking-widest text-center">Town Hall Square</span>
+                </div>
+
+                <!-- NPC 1: Mayor Mathers -->
+                <div id="npc-mayor" class="absolute transition-transform duration-200 text-center flex flex-col items-center cursor-pointer" style="top: 48%; left: 50%; transform: translate(-50%, -50%);" onclick="teleportAndTalk('mayor')">
+                    <div class="bg-white/95 border border-slate-800 text-[10px] font-black px-2 py-0.5 rounded-full mb-1 shadow-sm">Mayor Mathers</div>
+                    <!-- Premium Human Mayor Character Sprite -->
+                    <svg class="w-10 h-10 sm:w-12 sm:h-12 animate-bounce-slow" viewBox="0 0 64 64">
+                        <rect x="20" y="36" width="24" height="24" rx="6" fill="#1e3a8a" stroke="#1e293b" stroke-width="2.5" />
+                        <path d="M26,36 L32,42 L38,36" fill="none" stroke="#1e293b" stroke-width="2" />
+                        <circle cx="32" cy="46" r="3.5" fill="#fbbf24" stroke="#1e293b" stroke-width="1" />
+                        <circle cx="32" cy="22" r="11" fill="#fed7aa" stroke="#1e293b" stroke-width="2.5" />
+                        <path d="M20,18 Q32,10 44,18 Q40,14 32,15 Q24,14 20,18" fill="#94a3b8" stroke="#1e293b" stroke-width="2" />
+                        <!-- mustache & monocle -->
+                        <path d="M27,27 Q32,29 37,27" fill="none" stroke="#475569" stroke-width="3" stroke-linecap="round" />
+                        <circle cx="37" cy="22" r="3.5" fill="none" stroke="#fbbf24" stroke-width="2" />
+                        <line x1="40.5" y1="22" x2="44" y2="30" stroke="#fbbf24" stroke-width="1.5" />
+                        <circle cx="27" cy="21" r="1.5" fill="#1e293b" />
+                    </svg>
+                </div>
+
+                <!-- NPC 2: Chef Mustard -->
+                <div id="npc-chef" class="absolute transition-transform duration-200 text-center flex flex-col items-center cursor-pointer" style="top: 48%; left: 18%; transform: translate(-50%, -50%);" onclick="teleportAndTalk('chef')">
+                    <div class="bg-white/95 border border-slate-800 text-[10px] font-black px-2 py-0.5 rounded-full mb-1 shadow-sm">Chef Mustard</div>
+                    <!-- Premium Human Chef Sprite -->
+                    <svg class="w-10 h-10 sm:w-12 sm:h-12 animate-bounce-slow" viewBox="0 0 64 64">
+                        <!-- Puffy Chef Hat -->
+                        <ellipse cx="32" cy="11" rx="14" ry="7" fill="#ffffff" stroke="#1e293b" stroke-width="2.5" />
+                        <rect x="22" y="14" width="20" height="9" fill="#ffffff" stroke="#1e293b" stroke-width="2.5" />
+                        <!-- Outfit -->
+                        <rect x="20" y="38" width="24" height="22" rx="4" fill="#eab308" stroke="#1e293b" stroke-width="2.5" />
+                        <!-- Human Head -->
+                        <circle cx="32" cy="26" r="10" fill="#ffedd5" stroke="#1e293b" stroke-width="2.5" />
+                        <!-- Eyes -->
+                        <circle cx="28" cy="25" r="1.5" fill="#1e293b" />
+                        <circle cx="36" cy="25" r="1.5" fill="#1e293b" />
+                        <!-- Chef Mustache -->
+                        <path d="M26,29 Q32,32 38,29 Q32,27 26,29" fill="#78350f" stroke="#1e293b" stroke-width="1" />
+                    </svg>
+                </div>
+
+                <!-- NPC 3: Sweet Tooth Sally (Sweets Street - Top Left) -->
+                <div id="npc-sally" class="absolute transition-transform duration-200 text-center flex flex-col items-center cursor-pointer" style="top: 18%; left: 18%; transform: translate(-50%, -50%);" onclick="teleportAndTalk('sally')">
+                    <div id="label-sally" class="bg-white/95 border border-slate-800 text-[10px] font-black px-2 py-0.5 rounded-full mb-1 shadow-sm">Sally (Sweets St)</div>
+                    <!-- Premium Human Sally Sprite -->
+                    <svg class="w-10 h-10 sm:w-12 sm:h-12 animate-bounce-slow" viewBox="0 0 64 64">
+                        <!-- Pink Hair Puffs -->
+                        <circle cx="20" cy="18" r="7" fill="#ec4899" stroke="#1e293b" stroke-width="2" />
+                        <circle cx="44" cy="18" r="7" fill="#ec4899" stroke="#1e293b" stroke-width="2" />
+                        <!-- Outfit -->
+                        <rect x="20" y="36" width="24" height="24" rx="8" fill="#db2777" stroke="#1e293b" stroke-width="2.5" />
+                        <path d="M22,36 L26,42 L30,36" fill="none" stroke="#1e293b" stroke-width="2" />
+                        <!-- Human Head -->
+                        <circle cx="32" cy="24" r="11" fill="#fed7aa" stroke="#1e293b" stroke-width="2.5" />
+                        <!-- Eyes and Smile -->
+                        <ellipse cx="28" cy="23" r="1.5" fill="#1e293b" />
+                        <ellipse cx="36" cy="23" r="1.5" fill="#1e293b" />
+                        <path d="M29,28 Q32,31 35,28" fill="none" stroke="#1e293b" stroke-width="2" stroke-linecap="round" />
+                        <!-- Lollipop item held -->
+                        <circle cx="46" cy="36" r="5.5" fill="#f43f5e" stroke="#1e293b" stroke-width="2" />
+                        <line x1="46" y1="41.5" x2="46" y2="49" stroke="#1e293b" stroke-width="2" />
+                    </svg>
+                </div>
+
+                <!-- NPC 4: Farmer Sprout (Veggie Valley - Bottom Left) -->
+                <div id="npc-farmer" class="absolute transition-transform duration-200 text-center flex flex-col items-center cursor-pointer" style="top: 78%; left: 18%; transform: translate(-50%, -50%);" onclick="teleportAndTalk('farmer')">
+                    <div id="label-farmer" class="bg-white/95 border border-slate-800 text-[10px] font-black px-2 py-0.5 rounded-full mb-1 shadow-sm">Farmer Sprout</div>
+                    <!-- Premium Human Farmer Sprite -->
+                    <svg class="w-10 h-10 sm:w-12 sm:h-12 animate-bounce-slow" viewBox="0 0 64 64">
+                        <!-- Straw Hat Brim -->
+                        <ellipse cx="32" cy="18" rx="16" ry="4" fill="#eab308" stroke="#1e293b" stroke-width="2" />
+                        <!-- Overalls Outfit -->
+                        <rect x="20" y="36" width="24" height="24" rx="4" fill="#15803d" stroke="#1e293b" stroke-width="2.5" />
+                        <rect x="23" y="36" width="4" height="12" fill="#1d4ed8" stroke="#1e293b" stroke-width="1.5" />
+                        <rect x="37" y="36" width="4" height="12" fill="#1d4ed8" stroke="#1e293b" stroke-width="1.5" />
+                        <!-- Human Head -->
+                        <circle cx="32" cy="22" r="10" fill="#fdf0d5" stroke="#1e293b" stroke-width="2.5" />
+                        <path d="M22,17 Q32,10 42,17" fill="#eab308" stroke="#1e293b" stroke-width="2.5" />
+                        <!-- Face Details -->
+                        <circle cx="28" cy="22" r="1.5" fill="#1e293b" />
+                        <circle cx="36" cy="22" r="1.5" fill="#1e293b" />
+                        <path d="M29,26 Q32,29 35,26" fill="none" stroke="#1e293b" stroke-width="2" stroke-linecap="round" />
+                    </svg>
+                </div>
+
+                <!-- NPC 5: Rex (Carnivore Cliffs - Top Right) -->
+                <div id="npc-rex" class="absolute transition-transform duration-200 text-center flex flex-col items-center cursor-pointer" style="top: 18%; left: 82%; transform: translate(-50%, -50%);" onclick="teleportAndTalk('rex')">
+                    <div id="label-rex" class="bg-white/95 border border-slate-800 text-[10px] font-black px-2 py-0.5 rounded-full mb-1 shadow-sm">Rex (Cliffs)</div>
+                    <!-- Premium Human Rex Sprite -->
+                    <svg class="w-10 h-10 sm:w-12 sm:h-12 animate-bounce-slow" viewBox="0 0 64 64">
+                        <!-- Edgy Spiked Hair -->
+                        <polygon points="20,18 24,10 28,14 32,8 36,14 40,10 44,18" fill="#1e293b" stroke="#1e293b" stroke-width="2" />
+                        <!-- Leather Jacket / Outfit -->
+                        <rect x="20" y="36" width="24" height="24" rx="4" fill="#3f3f46" stroke="#1e293b" stroke-width="2.5" />
+                        <rect x="25" y="36" width="14" height="10" fill="#b91c1c" stroke="#1e293b" stroke-width="2" />
+                        <!-- Human Head -->
+                        <circle cx="32" cy="24" r="11" fill="#fddfbc" stroke="#1e293b" stroke-width="2.5" />
+                        <!-- Cool Sunglasses -->
+                        <polygon points="23,22 29,22 28,26 24,26" fill="#111827" stroke="#1e293b" stroke-width="1.5" />
+                        <polygon points="35,22 41,22 40,26 36,26" fill="#111827" stroke="#1e293b" stroke-width="1.5" />
+                        <line x1="29" y1="23" x2="35" y2="23" stroke="#1e293b" stroke-width="2" />
+                        <!-- Grin -->
+                        <path d="M28,29 L36,29" stroke="#1e293b" stroke-width="2" stroke-linecap="round" />
+                    </svg>
+                </div>
+
+                <!-- Walking Player Character Sprite -->
+                <div id="player-sprite" class="absolute transition-all duration-75 z-40 flex flex-col items-center" style="top: 50%; left: 20%; transform: translate(-50%, -50%);">
+                    <div id="player-label" class="bg-indigo-600 text-white text-[10px] font-black px-2 py-0.5 rounded-full mb-1 shadow-sm">You</div>
+                    <div id="player-svg-wrapper" class="w-12 h-12">
+                        <!-- SVG injected here during selection -->
+                    </div>
+                </div>
+
+                <!-- Immediate Interaction Bubble Trigger Area -->
+                <div id="action-prompt" class="hidden absolute bg-amber-400 border-2 border-slate-900 px-3 py-1.5 rounded-xl font-extrabold text-xs shadow-md animate-bounce z-50 pointer-events-none">
+                    Press <span class="bg-white px-1.5 py-0.5 rounded border border-slate-800">SPACE</span> or TAP/CLICK to talk!
+                </div>
+            </div>
+
+            <!-- Touch Layout Control Pad -->
+            <div class="grid grid-cols-3 gap-2 max-w-[220px] mx-auto md:hidden bg-slate-800 p-3 rounded-3xl border-4 border-slate-900 shadow-md">
+                <div></div>
+                <button onclick="movePlayer('up')" class="bg-slate-700 hover:bg-slate-600 active:bg-slate-500 text-white font-black text-xl p-3 rounded-2xl border-2 border-slate-950 shadow-sm flex items-center justify-center">▲</button>
+                <div></div>
+                
+                <button onclick="movePlayer('left')" class="bg-slate-700 hover:bg-slate-600 active:bg-slate-500 text-white font-black text-xl p-3 rounded-2xl border-2 border-slate-950 shadow-sm flex items-center justify-center">◀</button>
+                <button onclick="triggerInteraction()" class="bg-amber-400 hover:bg-amber-300 active:bg-amber-500 text-slate-900 font-black text-xs p-2 rounded-2xl border-2 border-slate-950 shadow-sm flex items-center justify-center">TALK</button>
+                <button onclick="movePlayer('right')" class="bg-slate-700 hover:bg-slate-600 active:bg-slate-500 text-white font-black text-xl p-3 rounded-2xl border-2 border-slate-950 shadow-sm flex items-center justify-center">▶</button>
+                
+                <div></div>
+                <button onclick="movePlayer('down')" class="bg-slate-700 hover:bg-slate-600 active:bg-slate-500 text-white font-black text-xl p-3 rounded-2xl border-2 border-slate-950 shadow-sm flex items-center justify-center">▼</button>
+                <div></div>
+            </div>
+
+            <!-- Interactive map helpful note -->
+            <p class="text-center text-xs text-slate-500 font-bold">💡 Tip: You can click directly on any character to automatically walk to them and start talking!</p>
+        </div>
+
+        <div id="dialog-overlay" class="hidden fixed inset-0 bg-slate-950/60 z-50 flex items-center justify-center p-4">
+            <div class="glass-panel rounded-3xl max-w-lg w-full bg-white p-6 relative flex flex-col gap-6">
+                
+                <!-- Character Portrait and Header -->
+                <div class="flex items-center gap-4 border-b-2 border-slate-200 pb-4">
+                    <div class="w-16 h-16 bg-amber-100 rounded-2xl border-2 border-slate-800 p-1 flex items-center justify-center" id="dialog-avatar">
+                        <!-- NPC SVG content goes here dynamically -->
+                    </div>
+                    <div>
+                        <h4 class="text-xl font-black text-slate-900" id="dialog-speaker-name">Character Name</h4>
+                        <p class="text-xs text-slate-500 font-bold" id="dialog-speaker-title">Town Resident</p>
+                    </div>
+                </div>
+
+                <!-- Speech Bubble and Text -->
+                <div>
+                    <div class="bg-slate-100 p-4 rounded-2xl border-2 border-slate-200 relative">
+                        <p class="text-slate-800 text-base font-medium leading-relaxed" id="dialog-text">
+                            Lorem ipsum dolor sit amet.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Interactive Question options or Next actions -->
+                <div class="flex flex-col gap-2" id="dialog-options">
+                    <!-- Option buttons will be dynamically rendered here -->
+                </div>
+
+                <!-- Custom Close / Skip Button -->
+                <button onclick="closeDialog()" class="absolute -top-3 -right-3 bg-red-400 hover:bg-red-500 text-slate-900 font-black border-2 border-slate-800 w-8 h-8 rounded-full flex items-center justify-center shadow-md">
+                    ✕
+                </button>
+            </div>
+        </div>
+
+        <div id="quest-sorting-screen" class="hidden w-full max-w-4xl glass-panel rounded-3xl bg-white p-6 flex flex-col gap-6 animate-bounce-slow">
+            <div class="text-center">
+                <span class="bg-amber-100 text-amber-700 font-extrabold px-3 py-1 rounded-full text-xs border border-amber-400 inline-block mb-2">Stage 3: Questionnaire Builder</span>
+                <h3 class="text-2xl sm:text-3xl font-black text-slate-900 leading-none">Sort the Questionnaire Items!</h3>
+                <p class="text-slate-600 text-sm mt-1">Chef Mustard needs an unbiased survey to find if students want healthier vegetarian lunches. Help him sort the options!</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Dropzone 1: Biased (Avoid) -->
+                <div class="bg-red-50 rounded-2xl p-4 border-4 border-dashed border-red-300 min-h-[220px] flex flex-col gap-3">
+                    <h4 class="text-red-700 font-black flex items-center gap-2">
+                        ❌ BIASED & LOADED (Do Not Use)
+                    </h4>
+                    <p class="text-xs text-red-600">These contain leading words, assume answers, or violate privacy.</p>
+                    <div id="drop-biased" class="flex-grow flex flex-col gap-2 min-h-[100px]" ondrop="drop(event, 'biased')" ondragover="allowDrop(event)">
+                        <!-- Dropped biased items here -->
+                    </div>
+                </div>
+
+                <!-- Dropzone 2: Unbiased (Use) -->
+                <div class="bg-emerald-50 rounded-2xl p-4 border-4 border-dashed border-emerald-300 min-h-[220px] flex flex-col gap-3">
+                    <h4 class="text-emerald-700 font-black flex items-center gap-2">
+                        ✅ UNBIASED & FAIR (Include)
+                    </h4>
+                    <p class="text-xs text-emerald-600">These are neutral, simple to understand, and objective.</p>
+                    <div id="drop-unbiased" class="flex-grow flex flex-col gap-2 min-h-[100px]" ondrop="drop(event, 'unbiased')" ondragover="allowDrop(event)">
+                        <!-- Dropped unbiased items here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- List of Questions to Sort -->
+            <div>
+                <h5 class="text-sm font-black text-slate-800 mb-2">Drag or Tap/Click the items below to sort them:</h5>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="items-to-sort">
+                    <!-- Dynamic sortable questions will be generated here -->
+                </div>
+            </div>
+
+            <!-- Validation Button -->
+            <button onclick="validateSortingQuest()" class="btn-cartoon w-full bg-indigo-500 hover:bg-indigo-600 text-white font-extrabold py-3.5 rounded-2xl text-lg">
+                Submit and Validate Questionnaire!
+            </button>
+        </div>
+
+        <div id="math-lab-screen" class="hidden w-full max-w-2xl glass-panel rounded-3xl bg-white p-6 sm:p-10 flex flex-col gap-6">
+            <div class="text-center">
+                <span class="bg-purple-100 text-purple-700 font-extrabold px-3 py-1 rounded-full text-xs border border-purple-400 inline-block mb-2">Stage 4: Mathematical Analysis</span>
+                <h3 class="text-2xl sm:text-3xl font-black text-slate-900">Stat Town Math Lab</h3>
+                <p class="text-slate-600 text-sm mt-1">Let's calculate the statistics and check for biases in the collected responses!</p>
+            </div>
+
+            <div class="bg-indigo-50 rounded-2xl p-4 border border-indigo-200">
+                <h4 class="font-extrabold text-slate-800 mb-2">Your Collected Sample Data:</h4>
+                <ul class="text-sm text-slate-700 space-y-1">
+                    <li>• Total residents sampled in survey (<span class="font-serif italic font-bold">n</span>): <strong id="math-lab-total-sampled">10</strong></li>
+                    <li>• Total residents who voted 'YES' to vegetarian options: <strong id="math-lab-total-yes">7</strong></li>
+                    <li>• Neighborhoods visited: <strong class="text-emerald-700">3 out of 3 (Representative Survey!)</strong></li>
+                </ul>
+            </div>
+
+            <!-- Math Question Form -->
+            <div class="flex flex-col gap-4">
+                <div>
+                    <label class="block text-sm font-black text-slate-800 mb-1">
+                        1. Calculate the sample proportion (<span class="font-serif italic font-bold">p̂</span>) of residents who want vegetarian options:
+                    </label>
+                    <p class="text-xs text-slate-500 mb-2">Express as a decimal fraction rounded to 2 decimal places (e.g., 3 out of 10 = 0.30).</p>
+                    <input type="number" id="input-proportion" step="0.01" class="w-full border-2 border-slate-900 rounded-xl p-3 focus:ring-2 focus:ring-indigo-400 outline-none" placeholder="e.g. 0.35">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-black text-slate-800 mb-1">
+                        2. If we only sampled Veggie Valley, what type of sampling bias occurs?
+                    </label>
+                    <select id="select-bias-type" class="w-full border-2 border-slate-900 rounded-xl p-3 bg-white focus:ring-2 focus:ring-indigo-400 outline-none">
+                        <option value="">-- Select Bias Type --</option>
+                        <option value="convenience">Convenience Bias (Sampling mostly healthy eaters)</option>
+                        <option value="measurement">Measurement Error (Miscalibrated tools)</option>
+                        <option value="nonresponse">Non-response Bias (People refused to answer)</option>
+                    </select>
+                </div>
+            </div>
+
+            <button onclick="submitMathLab()" class="btn-cartoon w-full bg-emerald-400 hover:bg-emerald-500 text-slate-900 font-extrabold py-3.5 rounded-2xl text-lg">
+                Submit Laboratory Report!
+            </button>
+        </div>
+
+        <div id="results-screen" class="hidden w-full max-w-xl glass-panel rounded-3xl bg-white p-6 sm:p-10 text-center flex flex-col gap-6">
+            <h2 class="text-4xl font-black text-slate-900 leading-none">Mission Complete! 🎓</h2>
+            <p class="text-slate-600 text-lg">Excellent work! You have navigated the intricacies of QCE Unit 2, Topic 1 and proved your expertise in Data collection.</p>
+
+            <div class="bg-yellow-50 rounded-2xl p-5 border-2 border-amber-300">
+                <h4 class="font-black text-slate-800 uppercase text-xs tracking-wider mb-2">Your Professional Stats Certificate</h4>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-white p-3 rounded-xl border border-amber-200">
+                        <span class="text-xs text-slate-500 block">Final Score</span>
+                        <strong class="text-2xl font-black text-indigo-600" id="final-score-val">100/100</strong>
+                    </div>
+                    <div class="bg-white p-3 rounded-xl border border-amber-200">
+                        <span class="text-xs text-slate-500 block">Syllabus Grade</span>
+                        <strong class="text-2xl font-black text-emerald-600" id="final-grade-val">A</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- QCE Skill Summary Checklist -->
+            <div class="text-left bg-slate-50 rounded-xl p-4 border border-slate-200">
+                <h5 class="text-sm font-black text-slate-800 mb-2">Syllabus Competency Cleared:</h5>
+                <ul class="text-xs text-slate-700 space-y-2">
+                    <li class="flex items-center gap-2">
+                        <span class="text-emerald-600 font-bold">✔</span>
+                        <span>Understand when to use Census vs Surveys (pros/cons).</span>
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <span class="text-emerald-600 font-bold">✔</span>
+                        <span>Identified targets & mitigated Convenience Bias.</span>
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <span class="text-emerald-600 font-bold">✔</span>
+                        <span>Filtered questionnaire items to protect from bias.</span>
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <span class="text-emerald-600 font-bold">✔</span>
+                        <span>Calculated experimental sample proportions (p̂).</span>
+                    </li>
+                </ul>
+            </div>
+
+            <button onclick="resetGame()" class="btn-cartoon w-full bg-slate-800 hover:bg-slate-900 text-white font-extrabold py-3 rounded-2xl">
+                Play Quest Again (With Random Values!)
+            </button>
+        </div>
+
+    </main>
+
+    <script>
+        // Core game state
+        let gameState = {
+            character: 'statman',
+            questLevel: 1, // 1: Census Decision, 2: Neighborhood walking, 3: Questionnaire Sorting, 4: Calculations, 5: Done
+            score: 0,
+            playerPosition: { x: 50, y: 55 }, // Percentage of map grid container
+            collectedSamples: {
+                "Sweets Street": false,
+                "Veggie Valley": false,
+                "Carnivore Cliffs": false
+            },
+            completedSteps: [false, false, false, false],
+            
+            // Randomized session data for complete replayability
+            randomized: {
+                sallyTotal: 4,
+                sallyYes: 2,
+                sproutTotal: 3,
+                sproutYes: 3,
+                rexTotal: 3,
+                rexYes: 2,
+                totalSample: 10,
+                totalYes: 7,
+                expectedProportion: 0.70
+            }
+        };
+
+        // Initialize Randomized Numbers for Current Session
+        function randomizeSessionValues() {
+            // Sally (Sweets St) - Sample size between 3 and 5, yes count between 1 and total-1
+            const sallyTotal = Math.floor(Math.random() * 3) + 3; // 3 to 5
+            const sallyYes = Math.floor(Math.random() * (sallyTotal - 1)) + 1; // 1 to total - 1
+
+            // Farmer Sprout (Veggie Valley) - always 100% yes (healthy eater zone)
+            const sproutTotal = Math.floor(Math.random() * 3) + 3; // 3 to 5
+            const sproutYes = sproutTotal;
+
+            // Rex (Carnivore Cliffs) - lower yes votes
+            const rexTotal = Math.floor(Math.random() * 3) + 3; // 3 to 5
+            const rexYes = Math.floor(Math.random() * (rexTotal - 1)) + 1; // 1 to total - 1
+
+            const totalSample = sallyTotal + sproutTotal + rexTotal;
+            const totalYes = sallyYes + sproutYes + rexYes;
+            const expectedProportion = parseFloat((totalYes / totalSample).toFixed(2));
+
+            gameState.randomized = {
+                sallyTotal,
+                sallyYes,
+                sproutTotal,
+                sproutYes,
+                rexTotal,
+                rexYes,
+                totalSample,
+                totalYes,
+                expectedProportion
+            };
+        }
+
+        // Static NPC placements on the grid. Syncs perfectly with visual markers
+        const npcs = {
+            mayor: { name: "Mayor Mathers", x: 50, y: 48, talkRadius: 8 },
+            chef: { name: "Chef Mustard", x: 18, y: 48, talkRadius: 8 },
+            sally: { name: "Sally", x: 18, y: 18, talkRadius: 8 },
+            farmer: { name: "Farmer Sprout", x: 18, y: 78, talkRadius: 8 },
+            rex: { name: "Rex", x: 82, y: 18, talkRadius: 8 }
+        };
+
+        // Premium Human-Like walking character SVGs (Matches character selector options)
+        const charSVGs = {
+            statman: `
+                <svg class="w-full h-full anim-walk" viewBox="0 0 64 64">
+                    <!-- Body/Outfit -->
+                    <rect x="18" y="38" width="28" height="24" rx="8" fill="#0284c7" stroke="#1e293b" stroke-width="3" />
+                    <path d="M26,38 L32,46 L38,38" fill="none" stroke="#1e293b" stroke-width="2.5" />
+                    <!-- Legs walking -->
+                    <line x1="26" y1="58" x2="26" y2="64" stroke="#1e293b" stroke-width="4" stroke-linecap="round" />
+                    <line x1="38" y1="58" x2="38" y2="64" stroke="#1e293b" stroke-width="4" stroke-linecap="round" />
+                    <!-- Human Face -->
+                    <circle cx="32" cy="24" r="14" fill="#ffedd5" stroke="#1e293b" stroke-width="3" />
+                    <!-- Hair -->
+                    <path d="M18,22 Q24,10 32,11 Q40,10 46,22 Q32,16 18,22" fill="#1e293b" stroke="#1e293b" stroke-width="2" />
+                    <!-- Glasses -->
+                    <circle cx="27" cy="24" r="4.5" fill="none" stroke="#0891b2" stroke-width="2.5" />
+                    <circle cx="37" cy="24" r="4.5" fill="none" stroke="#0891b2" stroke-width="2.5" />
+                    <line x1="31.5" y1="24" x2="32.5" y2="24" stroke="#0891b2" stroke-width="2.5" />
+                    <!-- Mouth smile -->
+                    <path d="M29,30 Q32,33 35,30" fill="none" stroke="#1e293b" stroke-width="2.5" stroke-linecap="round" />
+                    <!-- Rosy Cheeks -->
+                    <circle cx="23" cy="26" r="2" fill="#fda4af" opacity="0.6" />
+                    <circle cx="41" cy="26" r="2" fill="#fda4af" opacity="0.6" />
+                </svg>
+            `,
+            querygirl: `
+                <svg class="w-full h-full anim-walk" viewBox="0 0 64 64">
+                    <!-- Hair Back Buns -->
+                    <circle cx="18" cy="18" r="7" fill="#ea580c" stroke="#1e293b" stroke-width="2" />
+                    <circle cx="46" cy="18" r="7" fill="#ea580c" stroke="#1e293b" stroke-width="2" />
+                    <!-- Body/Outfit -->
+                    <rect x="18" y="38" width="28" height="24" rx="8" fill="#65a30d" stroke="#1e293b" stroke-width="3" />
+                    <!-- Legs walking -->
+                    <line x1="26" y1="58" x2="26" y2="64" stroke="#1e293b" stroke-width="4" stroke-linecap="round" />
+                    <line x1="38" y1="58" x2="38" y2="64" stroke="#1e293b" stroke-width="4" stroke-linecap="round" />
+                    <!-- Human Face -->
+                    <circle cx="32" cy="24" r="14" fill="#fed7aa" stroke="#1e293b" stroke-width="3" />
+                    <!-- Hair Front -->
+                    <path d="M18,22 Q32,12 46,22 Q38,18 32,21 Q26,18 18,22" fill="#ea580c" stroke="#1e293b" stroke-width="2.5" />
+                    <!-- Eyes -->
+                    <ellipse cx="26" cy="24" r="2.5" rx="2" fill="#1e293b" />
+                    <ellipse cx="38" cy="24" r="2.5" rx="2" fill="#1e293b" />
+                    <!-- Smile -->
+                    <path d="M29,29 Q32,32 35,29" fill="none" stroke="#1e293b" stroke-width="2.5" stroke-linecap="round" />
+                </svg>
+            `
+        };
+
+        function selectCharacter(char) {
+            gameState.character = char;
+            document.getElementById('char-btn-statman').classList.remove('ring-4', 'ring-indigo-500');
+            document.getElementById('char-btn-querygirl').classList.remove('ring-4', 'ring-indigo-500');
+            document.getElementById('char-btn-' + char).classList.add('ring-4', 'ring-indigo-500');
+        }
+
+        function startGame() {
+            randomizeSessionValues();
+            document.getElementById('welcome-screen').classList.add('hidden');
+            document.getElementById('game-map-screen').classList.remove('hidden');
+            
+            // Set up player sprite
+            const wrapper = document.getElementById('player-svg-wrapper');
+            wrapper.innerHTML = charSVGs[gameState.character];
+            
+            updatePlayerPosition();
+            initQuest(1);
+            setupInputListeners();
+        }
+
+        // Setup keyboard movement listeners
+        function setupInputListeners() {
+            window.addEventListener('keydown', function(e) {
+                // Ignore keys if modal dialog is open
+                if (!document.getElementById('dialog-overlay').classList.contains('hidden')) {
+                    if (e.key === 'Space' || e.key === ' ') {
+                        e.preventDefault();
+                    }
+                    return;
+                }
+
+                let step = 3; // walking speed step
+                if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') {
+                    moveCoordinates(0, -step);
+                    e.preventDefault();
+                } else if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') {
+                    moveCoordinates(0, step);
+                    e.preventDefault();
+                } else if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
+                    moveCoordinates(-step, 0);
+                    e.preventDefault();
+                } else if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
+                    moveCoordinates(step, 0);
+                    e.preventDefault();
+                } else if (e.key === ' ' || e.key === 'Spacebar') {
+                    triggerInteraction();
+                    e.preventDefault();
+                }
+            });
+        }
+
+        // Touch Control Movement support
+        function movePlayer(dir) {
+            let step = 6;
+            if (dir === 'up') moveCoordinates(0, -step);
+            if (dir === 'down') moveCoordinates(0, step);
+            if (dir === 'left') moveCoordinates(-step, 0);
+            if (dir === 'right') moveCoordinates(step, 0);
+        }
+
+        function moveCoordinates(dx, dy) {
+            gameState.playerPosition.x = Math.max(5, Math.min(95, gameState.playerPosition.x + dx));
+            gameState.playerPosition.y = Math.max(5, Math.min(95, gameState.playerPosition.y + dy));
+            updatePlayerPosition();
+            checkProximity();
+            checkZoneArrival();
+        }
+
+        function updatePlayerPosition() {
+            const player = document.getElementById('player-sprite');
+            player.style.left = gameState.playerPosition.x + '%';
+            player.style.top = gameState.playerPosition.y + '%';
+        }
+
+        // Auto teleports player to a clicked NPC and fires talk dialogue automatically
+        function teleportAndTalk(npcKey) {
+            const npc = npcs[npcKey];
+            if (!npc) return;
+            // Place player close to the target coordinates
+            gameState.playerPosition.x = npc.x;
+            gameState.playerPosition.y = npc.y + 6; // slightly below them
+            updatePlayerPosition();
+            checkProximity();
+            triggerInteraction();
+        }
+
+        // Detects when walking player crosses neighborhood borders
+        function checkZoneArrival() {
+            const x = gameState.playerPosition.x;
+            const y = gameState.playerPosition.y;
+            
+            if (gameState.questLevel === 2) {
+                if (x < 33 && y < 33 && !gameState.collectedSamples["Sweets Street"]) {
+                    interactSally();
+                } else if (x < 33 && y > 66 && !gameState.collectedSamples["Veggie Valley"]) {
+                    interactFarmer();
+                } else if (x > 66 && y < 33 && !gameState.collectedSamples["Carnivore Cliffs"]) {
+                    interactRex();
+                }
+            }
+        }
+
+        // Check if player is near any NPC to trigger prompt bubble
+        function checkProximity() {
+            const px = gameState.playerPosition.x;
+            const py = gameState.playerPosition.y;
+            let nearAny = false;
+            let activeNpc = null;
+
+            for (const key in npcs) {
+                const npc = npcs[key];
+                const distance = Math.sqrt(Math.pow(px - npc.x, 2) + Math.pow(py - npc.y, 2));
+                if (distance <= npc.talkRadius) {
+                    nearAny = true;
+                    activeNpc = key;
+                }
+            }
+
+            const prompt = document.getElementById('action-prompt');
+            if (nearAny) {
+                prompt.classList.remove('hidden');
+                prompt.style.left = (gameState.playerPosition.x) + '%';
+                prompt.style.top = (gameState.playerPosition.y - 12) + '%';
+                prompt.dataset.npc = activeNpc;
+            } else {
+                prompt.classList.add('hidden');
+            }
+        }
+
+        function triggerInteraction() {
+            const prompt = document.getElementById('action-prompt');
+            if (prompt.classList.contains('hidden')) return;
+            
+            const npcKey = prompt.dataset.npc;
+            if (npcKey === 'mayor') {
+                interactMayor();
+            } else if (npcKey === 'chef') {
+                interactChef();
+            } else if (npcKey === 'sally') {
+                interactSally();
+            } else if (npcKey === 'farmer') {
+                interactFarmer();
+            } else if (npcKey === 'rex') {
+                interactRex();
+            }
+        }
+
+        function updateProgressionUI() {
+            document.getElementById('score-pill').innerText = "Score: " + gameState.score;
+            for (let i = 1; i <= 4; i++) {
+                const dot = document.getElementById('dot-' + i);
+                if (gameState.completedSteps[i - 1]) {
+                    dot.classList.remove('bg-slate-300');
+                    dot.classList.add('bg-emerald-400');
+                } else {
+                    dot.classList.remove('bg-emerald-400');
+                    dot.classList.add('bg-slate-300');
+                }
+            }
+
+            // Update neighborhood collection HUD checklists
+            const chkSweets = document.getElementById('chk-sweets');
+            const chkVeggie = document.getElementById('chk-veggie');
+            const chkCliffs = document.getElementById('chk-cliffs');
+
+            if (gameState.collectedSamples["Sweets Street"]) {
+                chkSweets.className = "text-xs bg-emerald-100 text-emerald-800 font-extrabold px-2 py-0.5 rounded-full border border-emerald-300";
+                chkSweets.innerText = "🍬 Sweets Street ✅";
+                document.getElementById('label-sally').innerText = "Sally (Visited ✅)";
+            } else {
+                chkSweets.className = "text-xs bg-red-100 text-red-700 font-extrabold px-2 py-0.5 rounded-full border border-red-300";
+                chkSweets.innerText = "🍬 Sweets Street ❌";
+                document.getElementById('label-sally').innerText = "Sally (Sweets St)";
+            }
+
+            if (gameState.collectedSamples["Veggie Valley"]) {
+                chkVeggie.className = "text-xs bg-emerald-100 text-emerald-800 font-extrabold px-2 py-0.5 rounded-full border border-emerald-300";
+                chkVeggie.innerText = "🥦 Veggie Valley ✅";
+                document.getElementById('label-farmer').innerText = "Sprout (Visited ✅)";
+            } else {
+                chkVeggie.className = "text-xs bg-red-100 text-red-700 font-extrabold px-2 py-0.5 rounded-full border border-red-300";
+                chkVeggie.innerText = "🥦 Veggie Valley ❌";
+                document.getElementById('label-farmer').innerText = "Farmer Sprout";
+            }
+
+            if (gameState.collectedSamples["Carnivore Cliffs"]) {
+                chkCliffs.className = "text-xs bg-emerald-100 text-emerald-800 font-extrabold px-2 py-0.5 rounded-full border border-emerald-300";
+                chkCliffs.innerText = "🥩 Carnivore Cliffs ✅";
+                document.getElementById('label-rex').innerText = "Rex (Visited ✅)";
+            } else {
+                chkCliffs.className = "text-xs bg-red-100 text-red-700 font-extrabold px-2 py-0.5 rounded-full border border-red-300";
+                chkCliffs.innerText = "🥩 Carnivore Cliffs ❌";
+                document.getElementById('label-rex').innerText = "Rex (Cliffs)";
+            }
+        }
+
+        function initQuest(level) {
+            gameState.questLevel = level;
+            const title = document.getElementById('active-quest-title');
+            const desc = document.getElementById('active-quest-desc');
+            const emoji = document.getElementById('quest-emoji');
+            const checklist = document.getElementById('neighborhood-checklist');
+
+            if (level === 1) {
+                title.innerText = "Quest 1: Find Mayor Mathers!";
+                desc.innerText = "Walk over to the Town Hall at the center of town to start your data mission.";
+                emoji.innerText = "👑";
+                checklist.classList.add('hidden');
+            } else if (level === 2) {
+                title.innerText = "Quest 2: Neighborhood Sampling";
+                desc.innerText = "Collect sample data of residents wanting healthier school meals. Walk to Sweets Street (Top-Left), Veggie Valley (Bottom-Left), and Carnivore Cliffs (Top-Right).";
+                emoji.innerText = "📋";
+                checklist.classList.remove('hidden');
+            } else if (level === 3) {
+                title.innerText = "Quest 3: Sort Questionnaire Bias";
+                desc.innerText = "Walk up to Chef Mustard in his kitchen (Center-Left) to help filter his survey questions.";
+                emoji.innerText = "🍳";
+                checklist.classList.add('hidden');
+            } else if (level === 4) {
+                title.innerText = "Quest 4: Stat Town Math Lab";
+                desc.innerText = "Return to Town Hall to perform calculations on your collected sample data.";
+                emoji.innerText = "🔬";
+                checklist.classList.add('hidden');
+            }
+            updateProgressionUI();
+        }
+
+        function showDialog(speakerName, title, svgContent, text, optionsHTML) {
+            document.getElementById('dialog-speaker-name').innerText = speakerName;
+            document.getElementById('dialog-speaker-title').innerText = title;
+            document.getElementById('dialog-avatar').innerHTML = svgContent;
+            document.getElementById('dialog-text').innerText = text;
+            document.getElementById('dialog-options').innerHTML = optionsHTML;
+            document.getElementById('dialog-overlay').classList.remove('hidden');
+        }
+
+        function closeDialog() {
+            document.getElementById('dialog-overlay').classList.add('hidden');
+        }
+
+        function interactMayor() {
+            if (gameState.questLevel === 1) {
+                const svg = `<svg class="w-full h-full" viewBox="0 0 64 64"><circle cx="32" cy="22" r="11" fill="#fed7aa" stroke="#1e293b" stroke-width="2.5" /><rect x="20" y="36" width="24" height="24" rx="6" fill="#1e3a8a" stroke="#1e293b" stroke-width="2.5" /></svg>`;
+                const text = "Aha! Our data specialist has arrived. I want to find out what percentage of our school kids want vegetarian options. Should we run a full Census of all 1,000 students, or a Sample Survey of 10 students? Tell me what we should do!";
+                
+                const options = `
+                    <button onclick="chooseCensusAnswer(false)" class="btn-cartoon bg-rose-200 text-slate-900 font-extrabold text-sm p-3 rounded-xl text-left">
+                        "Let's do a full Census! It will get everyone's response." (Costly & Time Consuming)
+                    </button>
+                    <button onclick="chooseCensusAnswer(true)" class="btn-cartoon bg-emerald-200 text-slate-900 font-extrabold text-sm p-3 rounded-xl text-left">
+                        "Let's do a Sample Survey! It's much faster, cheaper, and highly accurate if sampled correctly."
+                    </button>
+                `;
+                showDialog("Mayor Mathers", "Town Mayor", svg, text, options);
+            } else if (gameState.questLevel === 4) {
+                startMathLab();
+            } else {
+                const svg = `<svg class="w-full h-full" viewBox="0 0 64 64"><circle cx="32" cy="22" r="11" fill="#fed7aa" stroke="#1e293b" stroke-width="2.5" /><rect x="20" y="36" width="24" height="24" rx="6" fill="#1e3a8a" stroke="#1e293b" stroke-width="2.5" /></svg>`;
+                showDialog("Mayor Mathers", "Town Mayor", svg, "Keep going on your quest! Complete the surveys in town then return here for calculations.", `<button onclick="closeDialog()" class="btn-cartoon bg-slate-200 font-extrabold p-2.5 rounded-xl">Got it!</button>`);
+            }
+        }
+
+        function chooseCensusAnswer(isCorrect) {
+            if (isCorrect) {
+                // Award points only once if first try
+                if (!gameState.completedSteps[0]) {
+                    gameState.score += 25;
+                    gameState.completedSteps[0] = true;
+                }
+                initQuest(2);
+                showDialog(
+                    "Mayor Mathers", 
+                    "Town Mayor", 
+                    `<svg class="w-full h-full" viewBox="0 0 64 64"><circle cx="32" cy="22" r="11" fill="#fed7aa" stroke="#1e293b" stroke-width="2.5" /><rect x="20" y="36" width="24" height="24" rx="6" fill="#1e3a8a" stroke="#1e293b" stroke-width="2.5" /></svg>`,
+                    "Correct! A Census would cost $5,000 and take 3 months. A survey is far more efficient. Go out and sample citizens from Veggie Valley, Sweets Street, and Carnivore Cliffs!",
+                    `<button onclick="closeDialog();" class="btn-cartoon bg-emerald-400 text-slate-900 font-extrabold px-6 py-2 rounded-xl">Start Sampling!</button>`
+                );
+            } else {
+                showDialog(
+                    "Mayor Mathers",
+                    "Town Mayor",
+                    `<svg class="w-full h-full" viewBox="0 0 64 64"><circle cx="32" cy="22" r="11" fill="#fed7aa" stroke="#1e293b" stroke-width="2.5" /><rect x="20" y="36" width="24" height="24" rx="6" fill="#1e3a8a" stroke="#1e293b" stroke-width="2.5" /></svg>`,
+                    "Oh dear... a Census of 1,000 students would cost the town way too much money and take weeks to calculate! A Survey is the practical choice here. Let's try surveying a smaller representative group instead.",
+                    `<button onclick="chooseCensusAnswer(true)" class="btn-cartoon bg-amber-400 font-extrabold p-2.5 rounded-xl">Acknowledge and Select Survey</button>`
+                );
+            }
+        }
+
+        function checkSamplingComplete() {
+            if (gameState.collectedSamples["Sweets Street"] && 
+                gameState.collectedSamples["Veggie Valley"] && 
+                gameState.collectedSamples["Carnivore Cliffs"]) {
+                
+                if (!gameState.completedSteps[1]) {
+                    // Maximum of 25 points total for Stage 2:
+                    // 15 points accumulated during visits (5 per neighborhood) + 10 points bonus here = exactly 25 points!
+                    gameState.score += 10; 
+                    gameState.completedSteps[1] = true;
+                }
+                
+                initQuest(3); 
+
+                showDialog(
+                    "Sampling Complete!",
+                    "System Notification",
+                    "✨",
+                    `Success! You have walked all three key neighborhoods in Stat Town and surveyed a total of ${gameState.randomized.totalSample} citizens. This prevents Convenience Bias, ensuring our sample is representative of the whole community!`,
+                    `<button onclick="closeDialog();" class="btn-cartoon bg-indigo-500 text-white font-extrabold px-6 py-2 rounded-xl">Go to Chef Mustard</button>`
+                );
+            }
+        }
+
+        function interactSally() {
+            const svg = `<svg class="w-full h-full" viewBox="0 0 64 64"><circle cx="32" cy="24" r="11" fill="#fed7aa" stroke="#1e293b" stroke-width="2.5" /><rect x="20" y="36" width="24" height="24" rx="8" fill="#db2777" stroke="#1e293b" stroke-width="2.5" /></svg>`;
+            const isCollected = gameState.collectedSamples["Sweets Street"];
+
+            if (isCollected) {
+                showDialog("Sally", "Sugar Cove Resident", svg, "Thanks for checking in! Remember, only surveying sugar lovers leads to skewed data!", `<button onclick="closeDialog()" class="btn-cartoon bg-slate-200 font-extrabold px-4 py-2 rounded-xl">Bye Sally!</button>`);
+            } else {
+                showDialog(
+                    "Sally",
+                    "Sugar Cove Resident",
+                    svg,
+                    `Oh, healthy school lunches? Well, we love sweets, but out of the ${gameState.randomized.sallyTotal} children in my candy circle, ${gameState.randomized.sallyYes} would happily eat veggie dishes if they had a sweet glaze. Put us down as ${gameState.randomized.sallyYes} 'YES' votes!`,
+                    `<button onclick="collectSample('Sweets Street'); closeDialog();" class="btn-cartoon bg-emerald-400 font-extrabold px-4 py-2 rounded-xl">Record Sample Data</button>`
+                );
+            }
+        }
+
+        function interactFarmer() {
+            const svg = `<svg class="w-full h-full" viewBox="0 0 64 64"><circle cx="32" cy="22" r="10" fill="#fdf0d5" stroke="#1e293b" stroke-width="2.5" /><rect x="20" y="36" width="24" height="24" rx="4" fill="#15803d" stroke="#1e293b" stroke-width="2.5" /></svg>`;
+            const isCollected = gameState.collectedSamples["Veggie Valley"];
+
+            if (isCollected) {
+                showDialog("Farmer Sprout", "Veggie Valley Resident", svg, "Fresh organic carrots always solve the day! Ensure you gather data from meat-lovers too to avoid bias.", `<button onclick="closeDialog()" class="btn-cartoon bg-slate-200 font-extrabold px-4 py-2 rounded-xl">Cheerio!</button>`);
+            } else {
+                showDialog(
+                    "Farmer Sprout",
+                    "Veggie Valley Resident",
+                    svg,
+                    `Our valley absolutely adores vegetables! Out of the ${gameState.randomized.sproutTotal} children in my household, all ${gameState.randomized.sproutYes} want more organic green lunches. Record that down!`,
+                    `<button onclick="collectSample('Veggie Valley'); closeDialog();" class="btn-cartoon bg-emerald-400 font-extrabold px-4 py-2 rounded-xl">Record Sample Data</button>`
+                );
+            }
+        }
+
+        function interactRex() {
+            const svg = `<svg class="w-full h-full" viewBox="0 0 64 64"><circle cx="32" cy="24" r="11" fill="#fddfbc" stroke="#1e293b" stroke-width="2.5" /><rect x="20" y="36" width="24" height="24" rx="4" fill="#3f3f46" stroke="#1e293b" stroke-width="2.5" /></svg>`;
+            const isCollected = gameState.collectedSamples["Carnivore Cliffs"];
+
+            if (isCollected) {
+                showDialog("Rex", "Carnivore Cliffs Local", svg, "Thanks for checking in! Remember to sample all neighborhoods to prevent bias.", `<button onclick="closeDialog()" class="btn-cartoon bg-slate-200 font-extrabold px-4 py-2 rounded-xl">See ya!</button>`);
+            } else {
+                showDialog(
+                    "Rex",
+                    "Carnivore Cliffs Local",
+                    svg,
+                    `Grr! We love our steaks and burgers up here! However, out of the ${gameState.randomized.rexTotal} kids surveyed in my compound, ${gameState.randomized.rexYes} would welcome vegetarian days as long as the meals taste fantastic. Write down ${gameState.randomized.rexYes} 'YES' votes!`,
+                    `<button onclick="collectSample('Carnivore Cliffs'); closeDialog();" class="btn-cartoon bg-emerald-400 font-extrabold px-4 py-2 rounded-xl">Record Sample Data</button>`
+                );
+            }
+        }
+
+        function collectSample(neighborhood) {
+            gameState.collectedSamples[neighborhood] = true;
+            // 5 points per neighborhood visited
+            gameState.score += 5;
+            updateProgressionUI();
+            checkSamplingComplete();
+        }
+
+        function interactChef() {
+            if (gameState.questLevel === 3) {
+                // Open sorting interface
+                document.getElementById('game-map-screen').classList.add('hidden');
+                document.getElementById('quest-sorting-screen').classList.remove('hidden');
+                generateSortingQuestItems();
+            } else {
+                const svg = `<svg class="w-full h-full" viewBox="0 0 64 64"><circle cx="32" cy="26" r="10" fill="#ffedd5" stroke="#1e293b" stroke-width="2.5" /><rect x="20" y="38" width="24" height="22" rx="4" fill="#eab308" stroke="#1e293b" stroke-width="2.5" /></svg>`;
+                showDialog("Chef Mustard", "Town Chef", svg, "Hold on there, investigator! Make sure you complete your representative neighborhood surveys with Sally, Sprout, and Rex first.", `<button onclick="closeDialog()" class="btn-cartoon bg-slate-200 font-extrabold px-4 py-2 rounded-xl">Will do!</button>`);
+            }
+        }
+
+        const surveyQuestionsToSort = [
+            { id: 'q1', text: "Don't you agree that yucky processed sausage rolls should be replaced with healthy veggies?", type: "biased" },
+            { id: 'q2', text: "Do you prefer vegetarian, meat-based, or mixed school lunch options?", type: "unbiased" },
+            { id: 'q3', text: "Do you support the school's great plan to improve health by serving local green beans?", type: "biased" },
+            { id: 'q4', text: "Would you eat lunch options labeled as vegetarian at least once a week?", type: "unbiased" },
+            { id: 'q5', text: "How many vegetarian lunches do you eat per week? (0, 1-2, 3+)", type: "unbiased" },
+            { id: 'q6', text: "Only bad parents would let their children refuse organic food, right?", type: "biased" }
+        ];
+
+        let currentSortedState = {
+            biased: [],
+            unbiased: []
+        };
+
+        function generateSortingQuestItems() {
+            const container = document.getElementById('items-to-sort');
+            container.innerHTML = "";
+            
+            // Render leftover sorted items back to stack if resetting
+            surveyQuestionsToSort.forEach(item => {
+                if (!currentSortedState.biased.includes(item.id) && !currentSortedState.unbiased.includes(item.id)) {
+                    const div = document.createElement('div');
+                    div.className = "bg-white border-2 border-slate-900 p-3 rounded-xl cursor-pointer text-xs font-bold hover:bg-slate-50 transition-all shadow-sm";
+                    div.id = item.id;
+                    div.draggable = true;
+                    div.innerText = item.text;
+                    div.ondragstart = (e) => drag(e, item.id);
+                    div.onclick = () => quickClickSort(item.id);
+                    container.appendChild(div);
+                }
+            });
+        }
+
+        function allowDrop(ev) {
+            ev.preventDefault();
+        }
+
+        function drag(ev, id) {
+            ev.dataTransfer.setData("text", id);
+        }
+
+        function drop(ev, bucketType) {
+            ev.preventDefault();
+            const id = ev.dataTransfer.getData("text");
+            moveToBucket(id, bucketType);
+        }
+
+        function quickClickSort(id) {
+            const item = surveyQuestionsToSort.find(q => q.id === id);
+            // Non-blocking selection modal for all devices (including iframe restrictions)
+            showDialog(
+                "Sort Questionnaire Item",
+                "Bias Identifier",
+                "📝",
+                `Determine the bias of: "${item.text}"`,
+                `
+                    <button onclick="moveToBucket('${id}', 'biased'); closeDialog();" class="btn-cartoon bg-red-100 hover:bg-red-200 text-red-950 font-black p-3 rounded-xl mb-2 text-left">
+                        ❌ BIASED & LOADED (Opinions, leading terms, or assumptions)
+                    </button>
+                    <button onclick="moveToBucket('${id}', 'unbiased'); closeDialog();" class="btn-cartoon bg-emerald-100 hover:bg-emerald-200 text-emerald-950 font-black p-3 rounded-xl text-left">
+                        ✅ UNBIASED & FAIR (Neutral, objective metrics, or options)
+                    </button>
+                `
+            );
+        }
+
+        function moveToBucket(id, bucketType) {
+            const itemElement = document.getElementById(id);
+            const targetContainer = document.getElementById('drop-' + bucketType);
+            
+            // Clean from previous buckets
+            currentSortedState.biased = currentSortedState.biased.filter(x => x !== id);
+            currentSortedState.unbiased = currentSortedState.unbiased.filter(x => x !== id);
+
+            currentSortedState[bucketType].push(id);
+            if (itemElement) {
+                targetContainer.appendChild(itemElement);
+                itemElement.className = "bg-white border-2 border-slate-900 p-2 rounded-lg text-xs font-bold w-full text-slate-800 shadow-sm";
+            } else {
+                // If clicked from interactive modal, create a node inside dropzone
+                const orig = surveyQuestionsToSort.find(q => q.id === id);
+                const div = document.createElement('div');
+                div.className = "bg-white border-2 border-slate-900 p-2 rounded-lg text-xs font-bold w-full text-slate-800 shadow-sm cursor-pointer";
+                div.id = id;
+                div.innerText = orig.text;
+                div.onclick = () => quickClickSort(id);
+                targetContainer.appendChild(div);
+                generateSortingQuestItems(); // clean remaining pool list
+            }
+        }
+
+        function validateSortingQuest() {
+            let correctCount = 0;
+            let totalToValidate = surveyQuestionsToSort.length;
+
+            currentSortedState.biased.forEach(id => {
+                const orig = surveyQuestionsToSort.find(q => q.id === id);
+                if (orig.type === 'biased') correctCount++;
+            });
+
+            currentSortedState.unbiased.forEach(id => {
+                const orig = surveyQuestionsToSort.find(q => q.id === id);
+                if (orig.type === 'unbiased') correctCount++;
+            });
+
+            if (correctCount === totalToValidate) {
+                if (!gameState.completedSteps[2]) {
+                    gameState.score += 25;
+                    gameState.completedSteps[2] = true;
+                }
+                
+                initQuest(4);
+
+                showDialog(
+                    "Perfect Score!",
+                    "System Notification",
+                    "🧑‍🍳",
+                    "Success! You correctly separated Loaded/Biased questions from Neutral/Unbiased Survey Questions. Chef Mustard can now run a perfectly balanced survey!",
+                    `<button onclick="closeDialog(); returnToMapFromChef();" class="btn-cartoon bg-indigo-500 text-white font-extrabold px-6 py-2 rounded-xl">Go to Mayor Mathers</button>`
+                );
+            } else {
+                showDialog(
+                    "Try Again!",
+                    "Assessment Validation Failed",
+                    "❌",
+                    `You sorted ${correctCount} out of ${totalToValidate} questions correctly. Remember: Loaded/Opinion-leading questions belong under BIASED, while simple/direct questions belong under UNBIASED!`,
+                    `<button onclick="closeDialog()" class="btn-cartoon bg-amber-400 font-extrabold px-4 py-1.5 rounded-xl">Fix My Sort</button>`
+                );
+            }
+        }
+
+        function returnToMapFromChef() {
+            document.getElementById('quest-sorting-screen').classList.add('hidden');
+            document.getElementById('game-map-screen').classList.remove('hidden');
+        }
+
+        function startMathLab() {
+            // Update Math lab UI texts with session-randomized variables
+            document.getElementById('math-lab-total-sampled').innerText = gameState.randomized.totalSample;
+            document.getElementById('math-lab-total-yes').innerText = gameState.randomized.totalYes;
+            
+            document.getElementById('game-map-screen').classList.add('hidden');
+            document.getElementById('math-lab-screen').classList.remove('hidden');
+        }
+
+        function submitMathLab() {
+            const propInput = parseFloat(document.getElementById('input-proportion').value);
+            const biasInput = document.getElementById('select-bias-type').value;
+
+            // Strict validation checks dynamically computed values
+            const expected = gameState.randomized.expectedProportion;
+            const absoluteDifference = Math.abs(propInput - expected);
+
+            // Accept answers within a tiny precision threshold to account for floating point input quirks
+            if (absoluteDifference <= 0.015 && biasInput === 'convenience') {
+                if (!gameState.completedSteps[3]) {
+                    gameState.score += 25;
+                    gameState.completedSteps[3] = true;
+                }
+                updateProgressionUI();
+                finishGame();
+            } else {
+                showDialog(
+                    "Analysis Incomplete",
+                    "Calculation Error",
+                    "🧐",
+                    `The proportions or bias classification are incorrect. Tips: Sample Proportion is calculated as Yes votes (${gameState.randomized.totalYes}) divided by Total Sample Size (${gameState.randomized.totalSample}). Check your math and round to 2 decimal places!`,
+                    `<button onclick="closeDialog()" class="btn-cartoon bg-red-400 font-extrabold px-4 py-1.5 rounded-xl">Try Again</button>`
+                );
+            }
+        }
+
+        function finishGame() {
+            document.getElementById('math-lab-screen').classList.add('hidden');
+            document.getElementById('results-screen').classList.remove('hidden');
+
+            document.getElementById('final-score-val').innerText = gameState.score + " / 100";
+            let grade = 'E';
+            if (gameState.score >= 90) grade = 'A';
+            else if (gameState.score >= 75) grade = 'B';
+            else if (gameState.score >= 55) grade = 'C';
+            else if (gameState.score >= 40) grade = 'D';
+
+            document.getElementById('final-grade-val').innerText = grade;
+        }
+
+        function resetGame() {
+            gameState = {
+                character: 'statman',
+                questLevel: 1,
+                score: 0,
+                playerPosition: { x: 50, y: 55 },
+                collectedSamples: {
+                    "Sweets Street": false,
+                    "Veggie Valley": false,
+                    "Carnivore Cliffs": false
+                },
+                completedSteps: [false, false, false, false],
+                randomized: {
+                    sallyTotal: 4,
+                    sallyYes: 2,
+                    sproutTotal: 3,
+                    sproutYes: 3,
+                    rexTotal: 3,
+                    rexYes: 2,
+                    totalSample: 10,
+                    totalYes: 7,
+                    expectedProportion: 0.70
+                }
+            };
+            
+            document.getElementById('input-proportion').value = "";
+            document.getElementById('select-bias-type').selectedIndex = 0;
+            
+            document.getElementById('results-screen').classList.add('hidden');
+            document.getElementById('welcome-screen').classList.remove('hidden');
+            
+            // Clean containers and sorted lists
+            currentSortedState = { biased: [], unbiased: [] };
+            document.getElementById('drop-biased').innerHTML = "";
+            document.getElementById('drop-unbiased').innerHTML = "";
+            
+            updateProgressionUI();
+        }
+    </script>
+</body>
+</html>
